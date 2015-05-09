@@ -1,13 +1,4 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Inicio</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script src="bootstrap.*"></script>-->
-</head>
-<body>
+<%- include('header') -%>
 
 <div class="container">
   <div class="row"><br><br><br><br><br><br></div>
@@ -16,6 +7,7 @@
   	<div class="col-md-6">
   		<center>
   		<h1>Iniciar sesión</h1>
+      <br><br>
   		<form action="">
   			<p> Usuario: <input type="text" id="username" required autocomplete="off"><br> </p>
   			<p> Contraseña: <input type="password" id="password" required><br> </p>
@@ -28,5 +20,4 @@
   <div class="row"> </div>
 </div>
 
-</body>
-</html>
+<%- include('footer') -%>

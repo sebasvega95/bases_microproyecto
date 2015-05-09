@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hospital</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/third_party/bootstrap/dist/css/bootstrap.min.css">
+    <script src="public/third_party/bootstrap/dist/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <% if (typeof user == 'object' && user) { %>
+      <p>
+        <a href="/">Inicio</a>
+        <a href="/account">Cuenta</a>
+        <a href="/logout">Cerrar sesión</a>
+      </p>
+    <% } else { %>
+      <p>
+        <a href="/">Inicio</a>
+        <a href="/login">Iniciar sesión</a>
+        <a href="/signup">Registrarse</a>
+      </p>
+    <% } %>
+
+    <% if (typeof message == 'object' && message) { %>
+      <p><%= message %></p>
+    <% } %>

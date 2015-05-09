@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hospital</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/third_party/bootstrap/dist/css/bootstrap.min.css">
+    <script src="public/third_party/bootstrap/dist/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <ul class="nav nav-tabs">
+    <% if (typeof user == 'object' && user) { %>
+        <li class="active"> <a href="/">Inicio</a> </li>
+        <li><a href="/account">Cuenta</a> </li>
+        <li><a href="/logout">Cerrar sesión</a> </li>
+    <% } else { %>
+
+        <li class="active"> <a href="/">Inicio</a> </li>
+        <li> <a href="/login">Iniciar sesión</a> </li>
+        <li> <a href="/signup">Registrarse</a> </li>
+    <% } %>
+    </ul>
+    <% if (typeof message == 'object' && message) { %>
+      <p><%= message %></p>
+    <% } %>
