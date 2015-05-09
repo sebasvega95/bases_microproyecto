@@ -5,19 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/third_party/bootstrap/dist/css/bootstrap.min.css">
-    <script src="public/third_party/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="third_party/jquery/dist/jquery.min.js"></script>
+    <script src="third_party/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
+
   <body>
     <ul class="nav nav-tabs">
     <% if (typeof user == 'object' && user) { %>
-        <li class="active"> <a href="/">Inicio</a> </li>
-        <li><a href="/account">Cuenta</a> </li>
-        <li><a href="/logout">Cerrar sesión</a> </li>
+        <li id="header_nav_1"> <a href="/">Inicio</a> </li>
+        <li id="header_nav_2"><a href="/account">Cuenta</a> </li>
+        <li id="header_nav_3"><a href="/logout">Cerrar sesión</a> </li>
     <% } else { %>
 
-        <li class="active"> <a href="/">Inicio</a> </li>
-        <li> <a href="/login">Iniciar sesión</a> </li>
-        <li> <a href="/signup">Registrarse</a> </li>
+        <li id="header_nav_1"> <a href="/">Inicio</a> </li>
+        <li id="header_nav_4"> <a href="/login">Iniciar sesión</a> </li>
+        <li id="header_nav_5"> <a href="/signup">Registrarse</a> </li>
     <% } %>
     </ul>
     <% if (typeof message == 'object' && message) { %>

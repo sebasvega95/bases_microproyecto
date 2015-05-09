@@ -1,23 +1,14 @@
 <%- include('header') -%>
 
-<div class="container">
-  <div class="row"><br><br><br><br><br><br></div>
-  <div class="row">
-  	<div class="col-md-3"></div>
-  	<div class="col-md-6">
-  		<center>
-  		<h1>Iniciar sesión</h1>
-      <br><br>
-  		<form action="">
-  			<p> Usuario: <input type="text" id="username" required autocomplete="off"><br> </p>
-  			<p> Contraseña: <input type="password" id="password" required><br> </p>
-  			<input type="submit" value="Ingresar">
-  		</form>
-      </center>
-  	</div>
-  	<div class="col-md-3"></div>
-  </div>
-  <div class="row"> </div>
+<div class="jumbotron wrapper">
+  <h1>Bienvenido!!</h1>
+  <p>Esta es la base de datos del hospital :D</p>
 </div>
+
+<script>
+  $(function() {
+    $("#header_nav_1").addClass("active");
+  });
+</script>
 
 <%- include('footer') -%>

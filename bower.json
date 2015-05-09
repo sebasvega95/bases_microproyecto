@@ -1,0 +1,26 @@
+{
+  "name": "microproyecto",
+  "version": "0.0.0",
+  "homepage": "https://github.com/sebasvega95/bases_microproyecto",
+  "authors": [
+    "sebasvega95 <sebas060495@hotmail.com>"
+  ],
+  "description": "Base de datos del hospital",
+  "main": "app.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/third_party",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.4"
+  }
+}
