@@ -14,15 +14,17 @@
     <ul class="nav nav-tabs">
     <% if (typeof user == 'object' && user) { %>
         <li id="header_nav_1"> <a href="/">Inicio</a> </li>
-        <li id="header_nav_2"><a href="/account">Cuenta</a> </li>
-        <li id="header_nav_3"><a href="/logout">Cerrar sesión</a> </li>
+        <li id="header_nav_2"> <a href="/account">Cuenta</a> </li>
+        <li id="header_nav_3"> <a href="/logout">Cerrar sesión</a> </li>
     <% } else { %>
-
         <li id="header_nav_1"> <a href="/">Inicio</a> </li>
         <li id="header_nav_4"> <a href="/login">Iniciar sesión</a> </li>
         <li id="header_nav_5"> <a href="/signup">Registrarse</a> </li>
     <% } %>
     </ul>
     <% if (typeof message == 'object' && message) { %>
+      <div class="alert alert-info alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <p><%= message %></p>
+      </div>
     <% } %>

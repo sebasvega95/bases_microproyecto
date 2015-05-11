@@ -7,18 +7,22 @@
     <div class="col-md-6">
     	<h1>Registro</h1>
       <br><br>
-      <form>
+      <form action="/signup" method="post">
         <div class="form-group">
           <label for="Inputuser">Usuario:</label>
-          <input type="text" class="form-control" id="InputUSer" placeholder="Ingrese el nombre de usuario">
+          <input type="text" name="name" class="form-control" id="InputUSer" placeholder="Ingrese el nombre de usuario" required autofocus>
         </div>
         <div class="form-group">
           <label for="InputPassword">Contraseña:</label>
-          <input type="password" class="form-control" id="InputPassword" placeholder="Ingrese su contraseña">
+          <input type="password" name="password" class="form-control" id="InputPassword" placeholder="Ingrese su contraseña" required>
+        </div>
+        <div class="form-group">
+          <label for="InputConfirmPassword">Confirmar contraseña:</label>
+          <input type="password" name="passwordConfirm" class="form-control" id="InputConfirmPassword" placeholder="Reingrese su contraseña">
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"> Admin
+            <input name="isAdmin" type="checkbox"> Admin
           </label>
         </div>
         <button type="submit" class="btn btn-default">Registrarse</button>
