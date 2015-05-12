@@ -9,13 +9,15 @@
     <script src="third_party/jquery/dist/jquery.min.js"></script>
     <script src="third_party/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
-
+  <% console.log(user) %>
   <body>
     <ul class="nav nav-tabs">
     <% if (typeof user == 'object' && user) { %>
         <li id="header_nav_1"> <a href="/">Inicio</a> </li>
         <li id="header_nav_2"> <a href="/account">Cuenta</a> </li>
-        <li id="header_nav_3"> <a href="/logout">Cerrar sesión</a> </li>
+        <!-- <li id="header_nav_3"> <a href="/logout">Cerrar sesión</a> </li> -->
+        <li id="header_nav_3"> <a href="/query">Consultas</a> </li>
+        <li id="header_nav_5"> <a href="/signup">Registrar</a> </li>
     <% } else { %>
         <li id="header_nav_1"> <a href="/">Inicio</a> </li>
         <li id="header_nav_4"> <a href="/login">Iniciar sesión</a> </li>

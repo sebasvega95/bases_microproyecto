@@ -6,34 +6,34 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var resourceful = require('resourceful');
-var passport = require('passport');
+//var passport = require('passport');
 var flash = require('connect-flash');
-var LocalStrategy = require('passport-local').Strategy;
+//var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session')
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
 //Passport
-var User = require('./models/user');
+//var User = require('./models/user');
 
 //Set ID for user in DB
-passport.serializeUser(function(user, done) {
+/*passport.serializeUser(function(user, done) {
   done(null, user._id);
-});
+});*/
 
 //Log out user
-passport.deserializeUser(function(id, done) {
+/*passport.deserializeUser(function(id, done) {
   User.find({_id : id},function (err, user) {
     if (err || user.length == 0)
       done(err, null);
     else
       done(err, user[0]);
   });
-});
+});*/
 
 //User-password strategy
-passport.use(new LocalStrategy(
+/*passport.use(new LocalStrategy(
   function(username, password, done) {
     process.nextTick(function () {
       User.find( {username : username}, function(err, user) {
@@ -45,7 +45,7 @@ passport.use(new LocalStrategy(
       })
     });
   }
-));
+));*/
 
 var app = express();
 
@@ -62,12 +62,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({ secret: 'asdfghjkl' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+//app.use(passport.initialize());
+//app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 
 // app.post('/login',
 //   passport.authenticate('local', { failureRedirect: '/login', failureFlash : true }),
