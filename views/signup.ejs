@@ -22,7 +22,11 @@
         </div>
         <div class="checkbox">
           <label>
-            <input name="isAdmin" type="checkbox"> Admin
+            <%  if (typeof user == 'object' && user && user.isAdmin == true) { %>
+              <input name="isAdmin" type="checkbox"> Admin
+            <% } else { %>
+            <input name="isAdmin" type="checkbox" disabled=true> Admin
+            <% } %>
           </label>
         </div>
         <button type="submit" class="btn btn-default">Registrarse</button>

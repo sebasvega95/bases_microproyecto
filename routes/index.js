@@ -10,6 +10,7 @@ router.get('/', function(req, res) {
   res.render('index', {user : req.user, message : msg});
 });
 
+/* -----  Log in -----*/
 router.get('/login', function(req, res) {
   res.render('login');
 });
@@ -35,14 +36,17 @@ router.get('/login', function(req, res) {
   });
 });*/
 
+/* ----- Log out -----*/
 router.get('/logout', function(req, res) {
   res.send('logout');
 });
 
+/* ----- Account management -----*/
 router.get('/account', function(req, res) {
   res.send('account');
 });
 
+/* ----- Sign up a new user ----- */
 router.get('/signup', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
@@ -61,7 +65,6 @@ router.post('/signup', function(req, res) {
           return res.send(500, err);
         }
 
-        console.log(data);
         if (data.length != 0) {
           req.flash('message', 'El usuario ya existe!!');
           res.redirect('/signup');
@@ -69,7 +72,7 @@ router.post('/signup', function(req, res) {
         else {
           User.create({ name : req.body.name,
                         password: req.body.password,
-                        isAdmin: req.body.isAdmin
+                        isAdmin: (req.body.isAdmin == 'on' ? true : false)
                        },
             function(err, data) {
               if (err) {

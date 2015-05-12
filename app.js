@@ -69,11 +69,11 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use('/', routes);
 app.use('/users', users);
 
-app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/login', failureFlash : true }),
-  function(req, res) {
-    res.redirect('/');
-});
+// app.post('/login',
+//   passport.authenticate('local', { failureRedirect: '/login', failureFlash : true }),
+//   function(req, res) {
+//     res.redirect('/');
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
