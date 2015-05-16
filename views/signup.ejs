@@ -20,15 +20,13 @@
           <label for="InputConfirmPassword">Confirmar contraseña:</label>
           <input type="password" name="passwordConfirm" class="form-control" id="InputConfirmPassword" placeholder="Reingrese su contraseña">
         </div>
-        <div class="checkbox">
-          <label>
-            <%  if (typeof user == 'object' && user && user.isAdmin == true) { %>
-              <input name="isAdmin" type="checkbox"> Admin
-            <% } else { %>
-            <input name="isAdmin" type="checkbox" disabled=true> Admin
-            <% } %>
-          </label>
-        </div>
+        <%  if (typeof user == 'object' && user && user.isAdmin == true) { %>
+          <div class="checkbox">
+            <label>
+                <input name="isAdmin" type="checkbox"> Admin
+            </label>
+          </div>
+        <% } %>
         <button type="submit" class="btn btn-default">Registrarse</button>
       </form>
     </div>

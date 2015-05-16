@@ -1,0 +1,42 @@
+<%- include('header') -%>
+
+<div class="container">
+  <div class="row"><br><br><br><br></div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1>Cuenta</h1>
+      <br><br>
+      <form action="/account" method="post">
+        <h3>Cambiar contraseña</h3>
+        <div class="form-group">
+          <label for="oldPassword">Contraseña actual:</label>
+          <input type="password" name="oldPsw" class="form-control" id="oldPassword" placeholder="Ingrese su contraseña" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Nueva contraseña:</label>
+          <input type="password" name="newPsw" class="form-control" id="newPassword" placeholder="Ingrese su nueva contraseña" required>
+        </div>
+        <div class="form-group">
+          <label for="newPasswordConfirm">Confirme su contraseña:</label>
+          <input type="password" name="newPswConfirm" class="form-control" id="newPasswordConfirm" placeholder="Ingrese de nuevo su nueva contraseña" required>
+        </div>
+        <button type="submit" class="btn btn-default">Guardar cambios</button>
+      </form>
+      <br>
+      <form action="/logout" method="post">
+        <button type="submit" class="btn btn-default">Cerrar sesión</button>
+      </form>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+  <div class="row"></div>
+</div>
+
+<script>
+  $(function() {
+    $("#header_nav_2").addClass("active");
+  });
+</script>
+
+<%- include('footer') -%>

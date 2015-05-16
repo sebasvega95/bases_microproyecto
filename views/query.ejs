@@ -1,0 +1,39 @@
+<%- include('header') -%>
+
+<div class='container'>
+  <div class="row"><br><br><br><br></div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1>Consultas</h1>
+      <br><br>
+      <form  action="/query" method="post">
+        <div class="form-group">
+          <label for="selectTable">Tabla:</label>
+          <select type="select" class="form-control" name="tableName" id="selectTable">
+            <option value="" disabled selected>Seleccione la tabla a consultar</option>
+            <option value="medic">Médicos</option>
+            <option value="nurse">Enfermeros</option>
+            <option value="floor">Platas</option>
+            <option value="staff">Personal</option>
+            <option value="patient">Pacientes</option>
+            <option value="diagnostic">Diagnósticos</option>
+            <option value="sector">Áreas</option>
+            <option value="bedAssign">Asignación de camas</option>
+          </select>
+        </div>
+
+      </form>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+  <div class="row"> </div>
+</div>
+
+<script>
+  $(function() {
+    $("#header_nav_3").addClass("active");
+  });
+</script>
+
+<%- include('footer') -%>
