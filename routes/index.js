@@ -12,18 +12,14 @@ var Diagnostic = require('../models/diagnostic');
 var Sector = require('../models/sector');
 var bedAssign = require('../models/bedAssign');
 
-
-
 var loggedUser = undefined;
-
 
 /* -------------------------  Home page ------------------------- */
 router.get('/', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
 
-  res.render('index', {user : loggedUser, message : msg, userNeeded: false});
-  // res.render('index', {user : req.user, message : msg});
+  res.render('index', {user : loggedUser, message : msg});
 });
 
 
@@ -32,9 +28,9 @@ router.get('/login', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
 
-  res.render('login', {user: loggedUser, message: msg, userNeeded: false});
-  //res.render('login', {user: req.user, message: msg});
+  res.render('login', {user: loggedUser, message: msg});
 });
+
 router.post('/login', function(req, res) {
   User.find({name: req.body.name, password: req.body.password},
     function(err, data) {
@@ -61,9 +57,12 @@ router.get('/account', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
 
-  res.render('account', {user: loggedUser, message: msg, userNeeded: true});
-  //res.render('signup', {user: req.user, message: msg});
+  if (typeof loggedUser == 'object' && loggedUser)
+    res.render('account', {user: loggedUser, message: msg});
+  else
+    res.render('noUser', {user: loggedUser, message: msg});
 });
+
 router.post('/account', function(req, res) {
   if (req.body.oldPsw != loggedUser.password) {
     req.flash('message', 'Contraseña incorrecta!!');
@@ -95,8 +94,7 @@ router.get('/signup', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
 
-  res.render('signup', {user: loggedUser, message: msg, userNeeded: false});
-  //res.render('signup', {user: req.user, message: msg});
+  res.render('signup', {user: loggedUser, message: msg});
 });
 router.post('/signup', function(req, res) {
   if (req.body.password !== req.body.passwordConfirm) {
@@ -142,8 +140,10 @@ router.get('/query', function(req, res) {
   var msg = req.flash('message') || req.flash('success');
   if (msg.length == 0) msg = null;
 
-  res.render('query', {user: loggedUser, message: msg, userNeeded: true});
-  //res.render('signup', {user: req.user, message: msg});
+  if (typeof loggedUser == 'object' && loggedUser)
+    res.render('query', {user: loggedUser, message: msg});
+  else
+    res.render('noUser', {user: loggedUser, message: msg});
 });
 router.post('/query', function(req, res) {
   console.log(req.body);

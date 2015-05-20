@@ -7,28 +7,77 @@
     <div class="col-md-6">
       <h1>Consultas</h1>
       <br><br>
-      <form  action="/query" method="post">
+      <form action="/query" method="post" class="form-inline">
         <div class="form-group">
           <label for="selectTable">Tabla:</label>
-          <select type="select" class="form-control" name="tableName" id="selectTable">
+          <select type="select" class="form-control" name="tableName" id="selectTable" onchange="changeFilter()">
             <option value="" disabled selected>Seleccione la tabla a consultar</option>
             <option value="medic">Médicos</option>
             <option value="nurse">Enfermeros</option>
-            <option value="floor">Platas</option>
             <option value="staff">Personal</option>
             <option value="patient">Pacientes</option>
             <option value="diagnostic">Diagnósticos</option>
-            <option value="sector">Áreas</option>
             <option value="bedAssign">Asignación de camas</option>
           </select>
         </div>
-
+        <div class="form-group">
+          <label for="filterBy">Filtrar por:</label>
+          <select type="select" class="form-control" name="filterBy" id="selectFilter" onchange="activateRange()">
+            <!--<option value="" disabled selected>Nada</option>
+            <option value="">Médicos</option>
+            <option value="nurse">Enfermeros</option>
+            <option value="staff">Personal</option>
+            <option value="patient">Pacientes</option>
+            <option value="diagnostic">Diagnósticos</option>
+            <option value="bedAssign">Asignación de camas</option>-->
+          </select>
+        </div>
+        <!-- <br>
+        <div class="form-group">
+          <input type="text">
+        </div> -->
       </form>
     </div>
     <div class="col-md-3"></div>
   </div>
   <div class="row"> </div>
 </div>
+
+<script>
+function changeFilter() {
+  var S = document.getElementById("selectFilter");
+  var T = document.getElementById("selectTable");
+  var opts = [];
+
+  for (i = 0; i < S.options.length; i++)
+    S.options.remove(i);
+  S.options.length = 0;
+  S.options.selectedIndex = -1;
+
+  if (T.options[T.selectedIndex] == '')
+    opts = [];
+  else if (T.options[T.selectedIndex].value == 'medic')
+    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['sector', 'Área']];
+  else if (T.options[T.selectedIndex].value == 'nurse')
+    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['floor', 'Planta']];
+  else if (T.options[T.selectedIndex].value == 'staff')
+    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['charge', 'Cargo']];
+  else if (T.options[T.selectedIndex].value == 'patient')
+    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['socialCare', 'Seguro social']];
+  else if (T.options[T.selectedIndex].value == 'diagnostic')
+    opts = [['id', 'ID'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
+  else if (T.options[T.selectedIndex].value == 'bedAssign')
+    opts = [['id', 'ID'], ['idPatient', 'Paciente'], ['idFloor', 'Planta']];
+
+  for (var i = 0; i < opts.length; i++)  {
+    var opt = document.createElement('option');
+    opt.value = opts[i][0];
+    opt.innerHTML = opts[i][1];
+    S.appendChild(opt);
+  }
+
+}
+</script>
 
 <script>
   $(function() {

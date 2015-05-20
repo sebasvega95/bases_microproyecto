@@ -5,7 +5,7 @@ var Medic = module.exports = resourceful.define('medic', function() {
   this.string('name2');
   this.string('ap1');
   this.string('ap2');
-  this.string('idArea');
+  this.string('idSector');
 
   this.timestamps(); //Time marks
 });
