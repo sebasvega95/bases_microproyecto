@@ -3,14 +3,14 @@ var router = express.Router();
 var passport = require("passport");
 
 var User = require('../models/user');
-var Medic = require('../models/medic');
-var Nurse = require('../models/nurse');
-var Floor = require('../models/floor');
-var Staff = require('../models/staff');
-var Patient = require('../models/patient');
-var Diagnostic = require('../models/diagnostic');
-var Sector = require('../models/sector');
-var bedAssign = require('../models/bedAssign');
+// var Medic = require('../models/medic');
+// var Nurse = require('../models/nurse');
+// var Floor = require('../models/floor');
+// var Staff = require('../models/staff');
+// var Patient = require('../models/patient');
+// var Diagnostic = require('../models/diagnostic');
+// var Sector = require('../models/sector');
+// var bedAssign = require('../models/bedAssign');
 
 var loggedUser = undefined;
 
@@ -96,6 +96,7 @@ router.get('/signup', function(req, res) {
 
   res.render('signup', {user: loggedUser, message: msg});
 });
+
 router.post('/signup', function(req, res) {
   if (req.body.password !== req.body.passwordConfirm) {
     req.flash('message', 'Las contraseñas no coinciden!!');
@@ -145,9 +146,19 @@ router.get('/query', function(req, res) {
   else
     res.render('noUser', {user: loggedUser, message: msg});
 });
+
 router.post('/query', function(req, res) {
-  console.log(req.body);
-  res.redirect('/query')
+  // console.log(req.body);
+  Query.obtain(req.body.tableName, req.body.filterBy, req.body.filter, function(err, data) {
+    if (err) {
+      console.log('Error : ', err);
+      return res.send(500, err);
+    }
+
+    res.render('query', data);
+  });
+
+  // res.redirect('/query');
 });
 
 /* ------------------------- Export ------------------------- */

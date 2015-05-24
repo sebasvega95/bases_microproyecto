@@ -7,7 +7,7 @@
     <div class="col-md-6">
       <h1>Consultas</h1>
       <br><br>
-      <form action="/query" method="post" class="form-inline">
+      <form action="/query" method="post">
         <div class="form-group">
           <label for="selectTable">Tabla:</label>
           <select type="select" class="form-control" name="tableName" id="selectTable" onchange="changeFilter()">
@@ -22,20 +22,21 @@
         </div>
         <div class="form-group">
           <label for="filterBy">Filtrar por:</label>
-          <select type="select" class="form-control" name="filterBy" id="selectFilter" onchange="activateRange()">
-            <!--<option value="" disabled selected>Nada</option>
+          <select type="select" class="form-control" name="filterBy" id="selectFilter" onchange="activateInput()">
+            <!--
             <option value="">Médicos</option>
             <option value="nurse">Enfermeros</option>
             <option value="staff">Personal</option>
             <option value="patient">Pacientes</option>
             <option value="diagnostic">Diagnósticos</option>
-            <option value="bedAssign">Asignación de camas</option>-->
+            <option value="bedAssign">Asignación de camas</option>
+            -->
           </select>
         </div>
-        <!-- <br>
         <div class="form-group">
-          <input type="text">
-        </div> -->
+          <input type="text" name="filter" id="Input" class="form-control" placeholder="Ingrese el filtro" disabled>
+        </div>
+        <button type="submit" class="btn btn-default">Consultar</button>
       </form>
     </div>
     <div class="col-md-3"></div>
@@ -57,17 +58,17 @@ function changeFilter() {
   if (T.options[T.selectedIndex] == '')
     opts = [];
   else if (T.options[T.selectedIndex].value == 'medic')
-    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['sector', 'Área']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['sector', 'Área']];
   else if (T.options[T.selectedIndex].value == 'nurse')
-    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['floor', 'Planta']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['floor', 'Planta']];
   else if (T.options[T.selectedIndex].value == 'staff')
     opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['charge', 'Cargo']];
   else if (T.options[T.selectedIndex].value == 'patient')
-    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['socialCare', 'Seguro social']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['socialCare', 'Seguro social']];
   else if (T.options[T.selectedIndex].value == 'diagnostic')
-    opts = [['id', 'ID'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
   else if (T.options[T.selectedIndex].value == 'bedAssign')
-    opts = [['id', 'ID'], ['idPatient', 'Paciente'], ['idFloor', 'Planta']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['idPatient', 'Paciente'], ['idFloor', 'Planta']];
 
   for (var i = 0; i < opts.length; i++)  {
     var opt = document.createElement('option');
@@ -77,6 +78,17 @@ function changeFilter() {
   }
 
 }
+</script>
+
+<script>
+  function activateInput() {
+    var S = document.getElementById("selectFilter");
+
+    if (S.options.length != 0)
+      document.getElementById("Input").disabled = false;
+    else
+      document.getElementById("Input").disabled = true;
+  }
 </script>
 
 <script>
