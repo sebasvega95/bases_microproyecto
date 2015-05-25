@@ -3,14 +3,8 @@ var router = express.Router();
 var passport = require("passport");
 
 var User = require('../models/user');
-// var Medic = require('../models/medic');
-// var Nurse = require('../models/nurse');
-// var Floor = require('../models/floor');
-// var Staff = require('../models/staff');
-// var Patient = require('../models/patient');
-// var Diagnostic = require('../models/diagnostic');
-// var Sector = require('../models/sector');
-// var bedAssign = require('../models/bedAssign');
+var Query = require('./query');
+// var Add = require('./add');
 
 var loggedUser = undefined;
 
@@ -142,24 +136,44 @@ router.get('/query', function(req, res) {
   if (msg.length == 0) msg = null;
 
   if (typeof loggedUser == 'object' && loggedUser)
-    res.render('query', {user: loggedUser, message: msg});
+    res.render('query', {user: loggedUser, message: msg, tableHeader: null, table: null});
   else
     res.render('noUser', {user: loggedUser, message: msg});
 });
 
 router.post('/query', function(req, res) {
-  // console.log(req.body);
-  Query.obtain(req.body.tableName, req.body.filterBy, req.body.filter, function(err, data) {
+  Query(req.body.tableName, req.body.filterBy, req.body.filter, function(err, name, head, data) {
     if (err) {
       console.log('Error : ', err);
       return res.send(500, err);
     }
 
-    res.render('query', data);
+    res.render('query', {user: loggedUser, tableName: name, tableHeader: head, table: data});
   });
-
-  // res.redirect('/query');
 });
+
+/* ------------------------- Add to tables ------------------------- */
+// router.get('/add', function(req, res) {
+//   var msg = req.flash('message') || req.flash('success');
+//   if (msg.length == 0) msg = null;
+//
+//   if (typeof loggedUser == 'object' && loggedUser)
+//     res.render('add', {user: loggedUser, message: msg});
+//   else
+//     res.render('noUser', {user: loggedUser, message: msg});
+// });
+//
+// router.post('/add', function(req, res) {
+//   var newEntry = req.body;
+//   Add(newEntry, function(err, head, data) {
+//     if (err) {
+//       console.log('Error : ', err);
+//       return res.send(500, err);
+//     }
+//
+//
+//   });
+// });
 
 /* ------------------------- Export ------------------------- */
 module.exports = router;

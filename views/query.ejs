@@ -41,7 +41,43 @@
     </div>
     <div class="col-md-3"></div>
   </div>
-  <div class="row"> </div>
+  <div class="row">
+    <% if (tableHeader && table) { %>
+    <br><br>
+    <h2><%= tableName %></h2>
+    <% console.log(tableHeader); %>
+    <% console.log(table); %>
+    <table class="table">
+      <thead>
+        <tr>
+          <% for (var i = 0; i < tableHeader.length; i++) { %>
+            <th> <%= tableHeader[i] %> </th>
+          <% } %>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < table.length; i++) { %>
+          <% for (var j = 0; j < table[i].length; j++) { %>
+            <tr>
+              <% if (tableHeader[i] == "Descripción") { %>
+                <td> <button class="btn btn-default" onclick="alert('Descripción:\n' + <%= table[i][j] %>)">Ver</td>
+              <% } else if (tableHeader[i] == "Fec. fin") { %>
+                <% if (table[i][j] == null) {%>
+                  <td> En uso </td>
+                <% } else { %>
+                  <td> <%= table[i][j] %> </td>
+                <% } %>
+              <% } else { %>
+                <td> <%= table[i][j] %> </td>
+              <% } %>
+            </tr>
+          <% } %>
+        <% } %>
+      </tbody>
+    </table>
+    <div class="row"></div>
+    <% } %>
+  </div>
 </div>
 
 <script>
@@ -58,13 +94,13 @@ function changeFilter() {
   if (T.options[T.selectedIndex] == '')
     opts = [];
   else if (T.options[T.selectedIndex].value == 'medic')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['sector', 'Área']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['sector', 'Área']];
   else if (T.options[T.selectedIndex].value == 'nurse')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['floor', 'Planta']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['floor', 'Planta']];
   else if (T.options[T.selectedIndex].value == 'staff')
-    opts = [['id', 'ID'], ['firstAp', 'Primer apellido'], ['charge', 'Cargo']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['charge', 'Cargo']];
   else if (T.options[T.selectedIndex].value == 'patient')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['firstAp', 'Primer apellido'], ['socialCare', 'Seguro social']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['socialCare', 'Seguro social']];
   else if (T.options[T.selectedIndex].value == 'diagnostic')
     opts = [['', 'Sin filtro'], ['id', 'ID'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
   else if (T.options[T.selectedIndex].value == 'bedAssign')

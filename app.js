@@ -9,7 +9,7 @@ var resourceful = require('resourceful');
 //var passport = require('passport');
 var flash = require('connect-flash');
 //var LocalStrategy = require('passport-local').Strategy;
-var session = require('express-session')
+var session = require('express-session');
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
