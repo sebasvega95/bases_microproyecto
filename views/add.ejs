@@ -1,5 +1,5 @@
 <%- include('header') -%>
-<!--
+
 <div class='container'>
   <div class="row"><br><br><br><br></div>
   <div class="row">
@@ -10,8 +10,8 @@
       <form action="/add" method="post">
         <div class="form-group">
           <label for="selectTable">Tabla:</label>
-          <select type="select" class="form-control" name="tableName" id="selectTable" onchange="changeFilter()">
-            <option value="" disabled selected>Seleccione la tabla</option>
+          <select type="select" class="form-control" name="tableName" id="selectTable" onchange="showForm()" autocomplete="off">
+            <option value="" disabled selected >Seleccione la tabla</option>
             <option value="medic">Médicos</option>
             <option value="nurse">Enfermeros</option>
             <option value="staff">Personal</option>
@@ -20,11 +20,449 @@
             <option value="bedAssign">Asignación de camas</option>
           </select>
         </div>
+        <div id="formContainer">
+        </div>
+        <br><br>
+        <button type="submit" id="submitEntry" class="btn btn-default" disabled>Añadir entrada</button>
     </div>
     <div class="col-md-3"></div>
   </div>
-  <div class="row"></div>
+  <div class="row"><br><br><br><br></div>
 </div>
+
+<script>
+function showForm() {
+  var container = document.getElementById("formContainer");
+  var T = document.getElementById("selectTable");
+
+  while (container.hasChildNodes())
+    container.removeChild(container.lastChild);
+
+  if (T.options[T.selectedIndex].value == 'medic') { // Médicos
+    container.appendChild(document.createTextNode("ID: "));
+    var idInput = document.createElement("input");
+    idInput.className = "form-control";
+    idInput.type = "text";
+    idInput.name = "id";
+    container.appendChild(idInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer nombre: "));
+    var name1Input = document.createElement("input");
+    name1Input.className = "form-control";
+    name1Input.type = "text";
+    name1Input.name = "name1";
+    container.appendChild(name1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo nombre: "));
+    var name2Input = document.createElement("input");
+    name2Input.className = "form-control";
+    name2Input.type = "text";
+    name2Input.name = "name2";
+    container.appendChild(name2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer apellido: "));
+    var ap1Input = document.createElement("input");
+    ap1Input.className = "form-control";
+    ap1Input.type = "text";
+    ap1Input.name = "ap1";
+    container.appendChild(ap1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo apellido: "));
+    var ap2Input = document.createElement("input");
+    ap2Input.className = "form-control";
+    ap2Input.type = "text";
+    ap2Input.name = "ap2";
+    container.appendChild(ap2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Área: "));
+    var sectorInput = document.createElement("select");
+    sectorInput.type = "select";
+    sectorInput.name = "idSector";
+    sectors = [["A1", "Cardiología"], ["A2", "Pediatría"], ["A3", "Obstetricia y Ginecología"], ["A4", "Urología"], ["A5", "Ortopedia"], ["A6", "Geriatría"], ["A7", "Neurología"]];
+    for (var i = 0; i < sectors.length; i++)  {
+      var opt = document.createElement('option');
+      opt.value = sectors[i][0];
+      opt.innerHTML = sectors[i][1];
+      sectorInput.appendChild(opt);
+    }
+    container.appendChild(sectorInput);
+    container.appendChild(document.createElement("br"));
+  }
+  else if (T.options[T.selectedIndex].value == 'nurse') { // Enfermeros
+    container.appendChild(document.createTextNode("ID: "));
+    var idInput = document.createElement("input");
+    idInput.className = "form-control";
+    idInput.type = "text";
+    idInput.name = "id";
+    container.appendChild(idInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer nombre: "));
+    var name1Input = document.createElement("input");
+    name1Input.className = "form-control";
+    name1Input.type = "text";
+    name1Input.name = "name1";
+    container.appendChild(name1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo nombre: "));
+    var name2Input = document.createElement("input");
+    name2Input.className = "form-control";
+    name2Input.type = "text";
+    name2Input.name = "name2";
+    container.appendChild(name2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer apellido: "));
+    var ap1Input = document.createElement("input");
+    ap1Input.className = "form-control";
+    ap1Input.type = "text";
+    ap1Input.name = "ap1";
+    container.appendChild(ap1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo apellido: "));
+    var ap2Input = document.createElement("input");
+    ap2Input.className = "form-control";
+    ap2Input.type = "text";
+    ap2Input.name = "ap2";
+    container.appendChild(ap2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Planta: "));
+    var floorInput = document.createElement("select");
+    floorInput.type = "select";
+    floorInput.name = "idFloor";
+    floors = [["P1", "Urgencias"], ["P2", "Observación"], ["P3", "Consultorios"], ["P4", "Laboratorio y exámenes"], ["P5", "Cirugía"], ["P6", "Traumatología y terapias"], ["P7", "UCI"]];
+    for (var i = 0; i < floors.length; i++)  {
+      var opt = document.createElement('option');
+      opt.value = floors[i][0];
+      opt.innerHTML = floors[i][1];
+      floorInput.appendChild(opt);
+    }
+    container.appendChild(floorInput);
+    container.appendChild(document.createElement("br"));
+  }
+  else if (T.options[T.selectedIndex].value == 'staff') { // Personal
+    container.appendChild(document.createTextNode("ID: "));
+    var idInput = document.createElement("input");
+    idInput.className = "form-control";
+    idInput.type = "text";
+    idInput.name = "id";
+    container.appendChild(idInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer nombre: "));
+    var name1Input = document.createElement("input");
+    name1Input.className = "form-control";
+    name1Input.type = "text";
+    name1Input.name = "name1";
+    container.appendChild(name1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo nombre: "));
+    var name2Input = document.createElement("input");
+    name2Input.className = "form-control";
+    name2Input.type = "text";
+    name2Input.name = "name2";
+    container.appendChild(name2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer apellido: "));
+    var ap1Input = document.createElement("input");
+    ap1Input.className = "form-control";
+    ap1Input.type = "text";
+    ap1Input.name = "ap1";
+    container.appendChild(ap1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo apellido: "));
+    var ap2Input = document.createElement("input");
+    ap2Input.className = "form-control";
+    ap2Input.type = "text";
+    ap2Input.name = "ap2";
+    container.appendChild(ap2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Cargo: "));
+    var chargeInput = document.createElement("input");
+    chargeInput.className = "form-control";
+    chargeInput.type = "text";
+    chargeInput.name = "charge";
+    container.appendChild(chargeInput);
+    container.appendChild(document.createElement("br"));
+  }
+  else if (T.options[T.selectedIndex].value == 'patient') { // Pacientes
+    container.appendChild(document.createTextNode("DNI: "));
+    var idInput = document.createElement("input");
+    idInput.className = "form-control";
+    idInput.type = "number";
+    idInput.min = 0;
+    idInput.max = 9999999999;
+    idInput.name = "id";
+    container.appendChild(idInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Seguro social: "));
+    var scInput = document.createElement("input");
+    scInput.className = "form-control";
+    scInput.type = "number";
+    scInput.min = 0;
+    scInput.max = 9999999999;
+    scInput.name = "socialCare";
+    container.appendChild(scInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer nombre: "));
+    var name1Input = document.createElement("input");
+    name1Input.className = "form-control";
+    name1Input.type = "text";
+    name1Input.name = "name1";
+    container.appendChild(name1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo nombre: "));
+    var name2Input = document.createElement("input");
+    name2Input.className = "form-control";
+    name2Input.type = "text";
+    name2Input.name = "name2";
+    container.appendChild(name2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Primer apellido: "));
+    var ap1Input = document.createElement("input");
+    ap1Input.className = "form-control";
+    ap1Input.type = "text";
+    ap1Input.name = "ap1";
+    container.appendChild(ap1Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Segundo apellido: "));
+    var ap2Input = document.createElement("input");
+    ap2Input.className = "form-control";
+    ap2Input.type = "text";
+    ap2Input.name = "ap2";
+    container.appendChild(ap2Input);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Fecha de nacimiento: "));
+    var yearInput = document.createElement("select");
+    yearInput.type = "select";
+    yearInput.name = "year";
+    var yearDef = document.createElement('option');
+    yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+    yearInput.appendChild(yearDef);
+    for (var i = 1900; i <= (new Date().getFullYear()); i++)  {
+      opt = document.createElement('option');
+      opt.value = i.toString();
+      opt.innerHTML = i.toString();
+      yearInput.appendChild(opt);
+    }
+    var monthInput = document.createElement("select");
+    monthInput.type = "select";
+    monthInput.name = "month";
+    var monthDef = document.createElement('option');
+    monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+    monthInput.appendChild(monthDef);
+    for (var i = 1; i <= 12; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      monthInput.appendChild(opt);
+    }
+    var dayInput = document.createElement("select");
+    dayInput.type = "select";
+    dayInput.name = "day";
+    var dayDef = document.createElement('option');
+    dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+    dayInput.appendChild(dayDef);
+    for (var i = 1; i <= 31; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      dayInput.appendChild(opt);
+    }
+    container.appendChild(yearInput);
+    container.appendChild(monthInput);
+    container.appendChild(dayInput);
+    container.appendChild(document.createElement("br"));
+  }
+  else if (T.options[T.selectedIndex].value == 'diagnostic') { // Diagnósticos
+    container.appendChild(document.createTextNode("ID médico: "));
+    var idMedicInput = document.createElement("input");
+    idMedicInput.className = "form-control";
+    idMedicInput.type = "text";
+    idMedicInput.name = "idMedic";
+    container.appendChild(idMedicInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("ID enfermero: "));
+    var idNurseInput = document.createElement("input");
+    idNurseInput.className = "form-control";
+    idNurseInput.type = "text";
+    idNurseInput.name = "idNurse";
+    container.appendChild(idNurseInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("DNI paciente: "));
+    var idPatientInput = document.createElement("input");
+    idPatientInput.className = "form-control";
+    idPatientInput.type = "number";
+    idPatientInput.min = 0;
+    idPatientInput.max = 9999999999;
+    idPatientInput.name = "idPatient";
+    container.appendChild(idPatientInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Fecha: "));
+    var yearInput = document.createElement("select");
+    yearInput.type = "select";
+    yearInput.name = "year";
+    var yearDef = document.createElement('option');
+    yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+    yearInput.appendChild(yearDef);
+    for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
+      opt = document.createElement('option');
+      opt.value = i.toString();
+      opt.innerHTML = i.toString();
+      yearInput.appendChild(opt);
+    }
+    var monthInput = document.createElement("select");
+    monthInput.type = "select";
+    monthInput.name = "month";
+    var monthDef = document.createElement('option');
+    monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+    monthInput.appendChild(monthDef);
+    for (var i = 1; i <= 12; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      monthInput.appendChild(opt);
+    }
+    var dayInput = document.createElement("select");
+    dayInput.type = "select";
+    dayInput.name = "day";
+    var dayDef = document.createElement('option');
+    dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+    dayInput.appendChild(dayDef);
+    for (var i = 1; i <= 31; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      dayInput.appendChild(opt);
+    }
+    container.appendChild(yearInput);
+    container.appendChild(monthInput);
+    container.appendChild(dayInput);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Tipo: "));
+    var typeInput = document.createElement("input");
+    typeInput.className = "form-control";
+    typeInput.type = "text";
+    typeInput.name = "type";
+    container.appendChild(typeInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Descripcion: "));
+    var descInput = document.createElement("textarea");
+    descInput.className = "form-control";
+    descInput.name = "desc";
+    container.appendChild(descInput);
+    container.appendChild(document.createElement("br"));
+  }
+  else if (T.options[T.selectedIndex].value == 'bedAssign') { // Asignación de camas
+    container.appendChild(document.createTextNode("DNI paciente: "));
+    var idPatientInput = document.createElement("input");
+    idPatientInput.className = "form-control";
+    idPatientInput.type = "number";
+    idPatientInput.min = 0;
+    idPatientInput.max = 9999999999;
+    idPatientInput.name = "idPatient";
+    container.appendChild(idPatientInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Planta: "));
+    var floorInput = document.createElement("select");
+    floorInput.type = "select";
+    floorInput.name = "idFloor";
+    floors = [["P1", "Urgencias"], ["P2", "Observación"], ["P3", "Consultorios"], ["P4", "Laboratorio y exámenes"], ["P5", "Cirugía"], ["P6", "Traumatología y terapias"], ["P7", "UCI"]];
+    for (var i = 0; i < floors.length; i++)  {
+      var opt = document.createElement('option');
+      opt.value = floors[i][0];
+      opt.innerHTML = floors[i][1];
+      floorInput.appendChild(opt);
+    }
+    container.appendChild(floorInput);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Nro. de cama: "));
+    var bedNumInput = document.createElement("input");
+    bedNumInput.className = "form-control";
+    bedNumInput.type = "number";
+    bedNumInput.name = "bedNum";
+    bedNumInput.min = 0;
+    bedNumInput.max = 40;
+    container.appendChild(bedNumInput);
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Fecha de inicio: "));
+    var yearInput = document.createElement("select");
+    yearInput.type = "select";
+    yearInput.name = "year";
+    var yearDef = document.createElement('option');
+    yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+    yearInput.appendChild(yearDef);
+    for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
+      opt = document.createElement('option');
+      opt.value = i.toString();
+      opt.innerHTML = i.toString();
+      yearInput.appendChild(opt);
+    }
+    var monthInput = document.createElement("select");
+    monthInput.type = "select";
+    monthInput.name = "month";
+    var monthDef = document.createElement('option');
+    monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+    monthInput.appendChild(monthDef);
+    for (var i = 1; i <= 12; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      monthInput.appendChild(opt);
+    }
+    var dayInput = document.createElement("select");
+    dayInput.type = "select";
+    dayInput.name = "day";
+    var dayDef = document.createElement('option');
+    dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+    dayInput.appendChild(dayDef);
+    for (var i = 1; i <= 31; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      dayInput.appendChild(opt);
+    }
+    container.appendChild(yearInput);
+    container.appendChild(monthInput);
+    container.appendChild(dayInput);
+    container.appendChild(document.createElement("br"));
+  }
+
+  for (var i = 0; i < container.childNodes.length; i++) {
+    if ((container.childNodes[i].type == 'text' || container.childNodes[i].type == 'select' || container.childNodes[i].type == 'number') && container.childNodes[i].name != "name2")
+      container.childNodes[i].required = true;
+  }
+  document.getElementById("submitEntry").disabled = false;
+}
+</script>
 
 <script>
   $(function() {
@@ -32,5 +470,5 @@
   });
 </script>
 
--->
+
 <%- include('footer') -%>

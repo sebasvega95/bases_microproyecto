@@ -4,7 +4,8 @@ var passport = require("passport");
 
 var User = require('../models/user');
 var Query = require('./query');
-// var Add = require('./add');
+var Add = require('./add');
+var Statistics = require('./statistics')
 
 var loggedUser = undefined;
 
@@ -108,6 +109,10 @@ router.post('/signup', function(req, res) {
           req.flash('message', 'El usuario ya existe!!');
           res.redirect('/signup');
         }
+        else if (req.body.name == '' || req.body.password == '') {
+          req.flash('message', 'Error al crear el susuario');
+          res.redirect('/signup');
+        }
         else {
           User.create({ name : req.body.name,
                         id: req.body.name,
@@ -142,6 +147,7 @@ router.get('/query', function(req, res) {
 });
 
 router.post('/query', function(req, res) {
+  console.log("query :D");
   Query(req.body.tableName, req.body.filterBy, req.body.filter, function(err, name, head, data) {
     if (err) {
       console.log('Error : ', err);
@@ -153,27 +159,58 @@ router.post('/query', function(req, res) {
 });
 
 /* ------------------------- Add to tables ------------------------- */
-// router.get('/add', function(req, res) {
-//   var msg = req.flash('message') || req.flash('success');
-//   if (msg.length == 0) msg = null;
-//
-//   if (typeof loggedUser == 'object' && loggedUser)
-//     res.render('add', {user: loggedUser, message: msg});
-//   else
-//     res.render('noUser', {user: loggedUser, message: msg});
-// });
-//
-// router.post('/add', function(req, res) {
-//   var newEntry = req.body;
-//   Add(newEntry, function(err, head, data) {
-//     if (err) {
-//       console.log('Error : ', err);
-//       return res.send(500, err);
-//     }
-//
-//
-//   });
-// });
+router.get('/add', function(req, res) {
+  var msg = req.flash('message') || req.flash('success');
+  if (msg.length == 0) msg = null;
+
+  if (typeof loggedUser == 'object' && loggedUser)
+    res.render('add', {user: loggedUser, message: msg});
+  else
+    res.render('noUser', {user: loggedUser, message: msg});
+});
+
+router.post('/add', function(req, res) {
+  var newEntry = req.body;
+
+  Add(newEntry, function(err) {
+    if (err) {
+      console.log(err);
+      req.flash('message', 'Hubo un error al ingresar la entrada, porfavor revise los campos');
+      res.redirect('/add');
+    }
+    else {
+      req.flash('message', "Entrada añadida con éxito");
+      res.redirect('/add');
+    }
+  });
+});
+
+/* ------------------------- Statistics ------------------------- */
+router.get('/statistics', function(req, res) {
+  var msg = req.flash('message') || req.flash('success');
+  if (msg.length == 0) msg = null;
+
+  if (!(typeof loggedUser == 'object' && loggedUser))
+    res.render('noUser', {user: loggedUser, message: msg});
+  else {
+    // var diagNum = [];
+    // var sectorNum = [];
+    // var patientNum = [];
+
+    Statistics(function (err, diagNum, sectorNum, patientNum) {
+      if (err) {
+        console.log(err);
+        req.flash('message', 'Hubo un error al recuperar los datos');
+        res.redirect('/add');
+      }
+    });
+
+    res.render('statistics', {user: loggedUser, message: msg, diagNum: null});
+  }
+
+
+});
+
 
 /* ------------------------- Export ------------------------- */
 module.exports = router;

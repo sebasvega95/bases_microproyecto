@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 var resourceful = require('resourceful');
 //var passport = require('passport');
@@ -106,11 +107,109 @@ app.use(function(err, req, res, next) {
   });
 });
 
-// Setting up the database
+/* ------------ Setting up the database ------------ */
 resourceful.use('couchdb', {
   host : 'localhost',
   port : '5984',
   database : 'bases_microproyecto'
 });
+
+// Plantas
+var Floor = require("./models/floor")
+fs.readFile("./models/definedFloors", function done(err, contents) {
+  if (err) {
+    console.log("Floors not defined");
+    Floor.create({ id: 'P1',
+                   type: "URGENCIAS",
+                   nBeds: 20,
+                   idNurse: "nurse/103"
+                });
+    Floor.create({ id: 'P2',
+                   type: "OBSERVACION",
+                   nBeds: 25,
+                   idNurse: "nurse/119"
+                });
+    Floor.create({ id: 'P3',
+                   type: "CONSULTORIOS",
+                   nBeds: 0,
+                   idNurse: "nurse/111"
+                });
+    Floor.create({ id: 'P4',
+                   type: "LABORATORIO Y EXAMENES",
+                   nBeds: 0,
+                   idNurse: "nurse/108"
+                });
+    Floor.create({ id: 'P5',
+                   type: "CIRUGIA",
+                   nBeds: 10,
+                   idNurse: "nurse/117"
+                });
+    Floor.create({ id: 'P6',
+                   type: "TRAUMATOLOGIA Y TERAPIAS",
+                   nBeds: 15,
+                   idNurse: "nurse/119"
+                });
+    Floor.create({ id: 'P7',
+                   type: "UCI",
+                   nBeds: 35,
+                   idNurse: "nurse/101"
+                });
+
+    fs.writeFile("./models/definedFloors", ":D", function (err) {
+      if (err)
+        return console.log('Error : ', err);
+    });
+  }
+  else
+    console.log("Floors defined");
+
+  return;
+});
+
+// Áreas
+var Sector = require("./models/sector")
+fs.readFile("./models/definedSectors", function done(err, contents) {
+  if (err) {
+    console.log("Sectors not defined");
+    Sector.create({ id: 'A1',
+                   name: "CARDIOLOGIA",
+                   idMedic: "medic/7"
+                });
+    Sector.create({ id: 'A2',
+                   name: "PEDIATRIA",
+                   idMedic: "medic/9"
+                });
+    Sector.create({ id: 'A3',
+                   name: "OBSTETRICIA Y GINECOLOGIA",
+                   idMedic: "medic/14"
+                });
+    Sector.create({ id: 'A4',
+                   name: "UROLOGIA",
+                   idMedic: "medic/8"
+                });
+    Sector.create({ id: 'A5',
+                   name: "ORTOPEDIA",
+                   idMedic: "medic/15"
+                });
+    Sector.create({ id: 'A6',
+                   name: "GERIATRIA",
+                   idMedic: "medic/12"
+                });
+    Sector.create({ id: 'A7',
+                   name: "NEUROLOGIA",
+                   idMedic: "medic/6"
+                });
+
+    fs.writeFile("./models/definedSectors", ":D", function (err) {
+      if (err)
+        return console.log('Error : ', err);
+    });
+  }
+  else
+    console.log("Sector defined");
+
+  return;
+});
+
 
 module.exports = app;

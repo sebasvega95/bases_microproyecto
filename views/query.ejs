@@ -22,21 +22,12 @@
         </div>
         <div class="form-group">
           <label for="filterBy">Filtrar por:</label>
-          <select type="select" class="form-control" name="filterBy" id="selectFilter" onchange="activateInput()">
-            <!--
-            <option value="">Médicos</option>
-            <option value="nurse">Enfermeros</option>
-            <option value="staff">Personal</option>
-            <option value="patient">Pacientes</option>
-            <option value="diagnostic">Diagnósticos</option>
-            <option value="bedAssign">Asignación de camas</option>
-            -->
-          </select>
+          <select type="select" class="form-control" name="filterBy" id="selectFilter" onchange="activateInput()" disabled></select>
         </div>
         <div class="form-group">
           <input type="text" name="filter" id="Input" class="form-control" placeholder="Ingrese el filtro" disabled>
         </div>
-        <button type="submit" class="btn btn-default">Consultar</button>
+        <button type="submit" id="submitForm" class="btn btn-default" disabled>Consultar</button>
       </form>
     </div>
     <div class="col-md-3"></div>
@@ -45,8 +36,6 @@
     <% if (tableHeader && table) { %>
     <br><br>
     <h2><%= tableName %></h2>
-    <% console.log(tableHeader); %>
-    <% console.log(table); %>
     <table class="table">
       <thead>
         <tr>
@@ -57,12 +46,12 @@
       </thead>
       <tbody>
         <% for (var i = 0; i < table.length; i++) { %>
+          <tr>
           <% for (var j = 0; j < table[i].length; j++) { %>
-            <tr>
-              <% if (tableHeader[i] == "Descripción") { %>
-                <td> <button class="btn btn-default" onclick="alert('Descripción:\n' + <%= table[i][j] %>)">Ver</td>
-              <% } else if (tableHeader[i] == "Fec. fin") { %>
-                <% if (table[i][j] == null) {%>
+              <% if (tableHeader[j] == "Descripción") { %>
+                <td> <button class="btn btn-default" onclick="alert('Descripción:\n' + '<%= table[i][j] %>')">Ver</td>
+              <% } else if (tableHeader[j] == "Fec. fin") { %>
+                <% if (table[i][j] == "") {%>
                   <td> En uso </td>
                 <% } else { %>
                   <td> <%= table[i][j] %> </td>
@@ -70,12 +59,12 @@
               <% } else { %>
                 <td> <%= table[i][j] %> </td>
               <% } %>
-            </tr>
           <% } %>
+        </tr>
         <% } %>
       </tbody>
     </table>
-    <div class="row"></div>
+    <div class="row"><br><br><br><br></div>
     <% } %>
   </div>
 </div>
@@ -94,17 +83,17 @@ function changeFilter() {
   if (T.options[T.selectedIndex] == '')
     opts = [];
   else if (T.options[T.selectedIndex].value == 'medic')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['sector', 'Área']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['idSector', 'Área']];
   else if (T.options[T.selectedIndex].value == 'nurse')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['floor', 'Planta']];
+    opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['idFloor', 'Planta']];
   else if (T.options[T.selectedIndex].value == 'staff')
     opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['charge', 'Cargo']];
   else if (T.options[T.selectedIndex].value == 'patient')
     opts = [['', 'Sin filtro'], ['id', 'ID'], ['ap1', 'Primer apellido'], ['socialCare', 'Seguro social']];
   else if (T.options[T.selectedIndex].value == 'diagnostic')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
+    opts = [['', 'Sin filtro'], ['idMedic', 'Médico'], ['idNurse', 'Enfermero'], ['idPatient', 'Paciente']];
   else if (T.options[T.selectedIndex].value == 'bedAssign')
-    opts = [['', 'Sin filtro'], ['id', 'ID'], ['idPatient', 'Paciente'], ['idFloor', 'Planta']];
+    opts = [['', 'Sin filtro'], ['idPatient', 'Paciente'], ['idFloor', 'Planta']];
 
   for (var i = 0; i < opts.length; i++)  {
     var opt = document.createElement('option');
@@ -113,6 +102,8 @@ function changeFilter() {
     S.appendChild(opt);
   }
 
+  S.disabled = false;
+  document.getElementById("submitForm").disabled = false;
 }
 </script>
 

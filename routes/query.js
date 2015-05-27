@@ -2,189 +2,214 @@ var express = require('express');
 var router = express.Router();
 var passport = require("passport");
 
-var Medic = require('../models/medic');
-var Nurse = require('../models/nurse');
-var Floor = require('../models/floor');
-var Staff = require('../models/staff');
-var Patient = require('../models/patient');
-var Diagnostic = require('../models/diagnostic');
-var Sector = require('../models/sector');
-var bedAssign = require('../models/bedAssign');
+var Medic = require(__dirname + '/../models/medic');
+var Nurse = require(__dirname + '/../models/nurse');
+var Floor = require(__dirname + '/../models/floor');
+var Staff = require(__dirname + '/../models/staff');
+var Patient = require(__dirname + '/../models/patient');
+var Diagnostic = require(__dirname + '/../models/diagnostic');
+var Sector = require(__dirname + '/../models/sector');
+var bedAssign = require(__dirname + '/../models/bedAssign');
+
+function trans(str) {
+  for (var i=0;i<str.length;i++){
+    if (str.charAt(i)=="á") str = str.replace(/á/,"a");
+    if (str.charAt(i)=="é") str = str.replace(/é/,"e");
+    if (str.charAt(i)=="í") str = str.replace(/í/,"i");
+    if (str.charAt(i)=="ó") str = str.replace(/ó/,"o");
+    if (str.charAt(i)=="ú") str = str.replace(/ú/,"u");
+    if (str.charAt(i)=="Á") str = str.replace(/Á/,"a");
+    if (str.charAt(i)=="É") str = str.replace(/É/,"e");
+    if (str.charAt(i)=="Í") str = str.replace(/Í/,"i");
+    if (str.charAt(i)=="Ó") str = str.replace(/Ó/,"o");
+    if (str.charAt(i)=="Ú") str = str.replace(/Ú/,"u");
+  }
+  return str.toUpperCase();
+}
 
 var Query = module.exports = function(tableName, filterBy, filter, callback) {
-  var table = [];
   var tableHeader;
+  var table = [];
+
+  var tmp = {};
+  if (filterBy != '')
+    tmp[((filterBy == "id") ? "_" : "") + filterBy] = ((filterBy == "id") ? (tableName + "/") : "") + trans(filter);
+  console.log(tmp);
+
   switch (tableName) {
     case "medic": { // Mostrar médicos
       tableHeader = ["ID", "Nombre", "Apellidos", "Área"];
-      Medic.all(function(err, data) {
+
+      Medic.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Médicos", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var sector;
-            Sector.find(data[i].idSector, function (err, dataSector) { sector = (err ? null : dataSector); });
-            table.push([data[i].id,
-                        (data[i].name1 + " " + data[i].name2),
-                        (data[i].ap1 + " " + data[i].ap2),
-                        dataSector[i].name]);
-          }
-        }
+          (function(i) {
+            Sector.get(data[i].idSector, function (err, dataSector) {
+              if (err)
+                return callback(err);
+              table.push([data[i].id,
+                          (data[i].name1 + " " + data[i].name2),
+                          (data[i].ap1 + " " + data[i].ap2),
+                          dataSector.name]);
 
-        callback(null, "Médicos", tableHeader, table);
+              if (table.length == data.length)
+                return callback(null, "Médicos", tableHeader, table);
+            });
+          })(i);
+        }
       });
       break;
     }
     case "nurse": { // Mostrar enfermeros
       tableHeader = ["ID", "Nombre", "Apellidos", "Piso"];
-      Nurse.all(function(err, data) {
+
+      Nurse.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Enfermeros", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var floor;
-            Floor.find(data[i].idFloor, function (err, dataFloor) { floor = (err ? null : dataFloor); });
-            table.push([data[i].id,
-                            (data[i].name1 + " " + data[i].name2),
-                            (data[i].ap1 + " " + data[i].ap2),
-                            dataFloor[i].name]);
-          }
+          (function(i) {
+            Floor.get(data[i].idFloor, function (err, dataFloor) {
+              if (err)
+                return callback(err);
+
+              table.push([data[i].id,
+                          (data[i].name1 + " " + data[i].name2),
+                          (data[i].ap1 + " " + data[i].ap2),
+                          dataFloor.type]);
+
+              if (table.length == data.length)
+                return callback(null, "Enfermeros", tableHeader, table);
+            });
+          })(i);
         }
-
-        callback(null, "Enfermeros", tableHeader, table);
-      });
-      break;
-    }
-    case "floor": { // Mostrar los pisos
-      tableHeader = ["ID", "Tipo", "Número de camas", "Enfermero encargado"];
-      Floor.all(function(err, data) {
-        if (err)
-          return callback(err);
-
-        for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var nurse;
-            Nurse.find(data[i].idFloor, function (err, dataNurse) { nurse = (err ? null : dataNurse); });
-            table.push([data[i].id,
-                        data[i].type,
-                        data[i].nBeds,
-                        (dataNurse[i].name1 + " " + dataNurse[i].ap2)]);
-          }
-        }
-
-        callback(null, "Pisos", tableHeader, table);
       });
       break;
     }
     case "staff": { // Mostrar los funcionarios
       tableHeader = ["ID", "Nombre", "Apellidos", "Cargo"];
-      Staff.all(function(err, data) {
+
+      Staff.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Personal", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-          table.push([data[i].id,
-                      (data[i].name1 + " " + data[i].name2),
-                      (data[i].ap1 + " " + data[i].ap2),
-                      data[i].charge]);
-          }
-        }
+          (function(i) {
+            table.push([data[i].id,
+                        (data[i].name1 + " " + data[i].name2),
+                        (data[i].ap1 + " " + data[i].ap2),
+                        data[i].charge]);
 
-        callback(null, "Personal", tableHeader, table);
+            if (table.length == data.length)
+              return callback(null, "Personal", tableHeader, table);
+          })(i);
+        }
       });
       break;
     }
     case "patient": { // Mostrar los pacientes
       tableHeader = ["DNI", "Nro. seguro social", "Nombre", "Apellidos", "Fec. nacimiento"];
-      Patient.all(function(err, data) {
+
+      Patient.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Pacientes", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
+          (function(i) {
             table.push([data[i].id,
                         data[i].socialCare,
                         (data[i].name1 + " " + data[i].name2),
                         (data[i].ap1 + " " + data[i].ap2),
                         data[i].birthDate]);
-          }
-        }
 
-        callback(null, "Pacientes", tableHeader, table);
+            if (table.length == data.length)
+              return callback(null, "Pacientes", tableHeader, table);
+          })(i);
+        }
       });
       break;
     }
     case "diagnostic": { // Mostrar los diagnósticos
-      tableHeader = ["ID", "Médico", "Enfermero", "Paciente", "Tipo", "Descripción", "Fecha"];
-      Diagnostic.all(function(err, data) {
+      tableHeader = ["Médico", "Enfermero", "Paciente", "Tipo", "Descripción", "Fecha"];
+
+      Diagnostic.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Diagnósticos", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var medic, nurse, patient;
-            Medic.find(data[i].idMedic, function (err, dataMedic) { medic = (err ? null : dataMedic); });
-            Nurse.find(data[i].idNurse, function (err, dataNurse) { nurse = (err ? null : dataNurse); });
-            Patient.find(data[i].idPatient, function (err, dataPatient) { patient = (err ? null : dataPatient); });
-
-            table.push([data[i].id,
-                        (medic.name1 + " " + medic.ap1),
-                        (nurse.name1 + " " + nurse.name2),
-                        (patient.ap1 + " " + patient.ap2),
-                        data[i].type,
-                        data[i].desc,
-                        data[i].date]);
-          }
+          (function(i) {
+            Medic.get(data[i].idMedic, function (err, dataMedic) {
+              if (err)
+                return callback(err);
+              Nurse.get(data[i].idNurse, function (err, dataNurse) {
+                if (err)
+                  return callback(err);
+                Patient.get(data[i].idPatient, function (err, dataPatient) {
+                  if (err)
+                    return callback(err);
+                  table.push([(dataMedic.id + ": " + dataMedic.name1 + " " + dataMedic.ap1),
+                              (dataNurse.id + ": " + dataNurse.name1 + " " + dataNurse.ap1),
+                              (dataPatient.id + ": " + dataPatient.name1 + " " + dataPatient.ap1),
+                              data[i].type,
+                              data[i].desc,
+                              data[i].date]);
+                  if (table.length == data.length)
+                    return callback(null, "Diagnósticos", tableHeader, table);
+                });
+              });
+            });
+          })(i);
         }
-
-        callback(null, "Diagnósticos", tableHeader, table);
-      });
-      break;
-    }
-    case "sector": { // Mostrar las áreas
-      tableHeader = ["ID", "Área", "Médico en jefe"];
-      Sector.all(function(err, data) {
-        if (err)
-          return callback(err);
-
-        for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var medic;
-            Medic.find(data[i].idMedic, function (err, dataMedic) { medic = (err ? null : dataMedic); });
-            table.push([data[i].id,
-                        data[i].name,
-                        (medic.name1 + " " + medic.ap1)]);
-          }
-        }
-
-        callback(null, "Sectores",tableHeader, table);
       });
       break;
     }
     case "bedAssign": { // Asignación de camas
-      tableHeader = ["ID", "Piso", "Nro. de cama", "Paciente", "Fec. ingreso", "Fec. fin"];
-      bedAssign.all(function(err, data) {
+      tableHeader = ["Piso", "Nro. de cama", "Paciente", "Fec. ingreso", "Fec. fin"];
+
+      bedAssign.find(tmp, function (err, data) {
         if (err)
-          return callback(err);
+           return callback(err);
+
+        if (data.length == 0)
+          return callback(null, "Asignación de camas", tableHeader, table);
 
         for (var i = 0; i < data.length; i++) {
-          if (filterBy == '' || data[i][filterBy] == filter.toUpperCase()) {
-            var patient, floor;
-            Patient.find(data[i].idPatient, function (err, dataPatient) { patient = (err ? null : dataPatient); });
-            Floor.find(data[i].idPatient, function (err, dataFloor) { floor = (err ? null : dataFloor); });
-            table.push([data[i].id,
-                        (floor.id + " - " + floor.type),
-                        data[i].bedNum,
-                        (patient.name1 + " " + patient.ap1),
-                        data[i].initDate,
-                        data[i].endDate]);
-          }
-        }
+          (function(i) {
+            Patient.get(data[i].idPatient, function (err, dataPatient) {
+              if (err)
+                return callback(err);
+              Floor.get(data[i].idFloor, function (err, dataFloor) {
+                if (err)
+                  return callback(err);
 
-        callback(null, "Asignación de camas", tableHeader, table);
+              table.push([(dataFloor.id + ": " + dataFloor.type),
+                          data[i].bedNum,
+                          (dataPatient.id + ": " + dataPatient.name1 + " " + dataPatient.ap1),
+                          data[i].initDate,
+                          data[i].endDate]);
+              if (table.length == data.length)
+                return callback(null, "Asignación de camas", tableHeader, table);
+              });
+            });
+          })(i);
+        }
       });
       break;
     }
