@@ -31,6 +31,20 @@ function empty(strs) {
   return false;
 }
 
+function validDate(y, m, d) {
+  var daysInMonth;
+  switch (m) {
+    case 1 :
+      daysInMonth = (y % 4 == 0 && y % 100) || y % 400 == 0 ? 29 : 28;
+    case 8 : case 3 : case 5 : case 10 :
+      daysInMonth = 30;
+    default :
+    daysInMonth = 31
+  }
+
+  return m >= 0 && m < 12 && d > 0 && d <= daysInMonth;
+}
+
 module.exports = function Add(newEntry, callback) {
   console.log(newEntry);
 
@@ -70,9 +84,11 @@ module.exports = function Add(newEntry, callback) {
 
       Nurse.get(newEntry.id, function (err, data) {
         if (!err || (data && data.length != 0))
+          return callback("Already exists");
         Floor.get(newEntry.idFloor, function (err, data) {
           if (err || data.length == 0)
             return callback("No entry");
+          console.log("creating")
           Nurse.create({id: newEntry.id,
                         name1: trans(newEntry.name1),
                         name2: trans(newEntry.name2),
@@ -165,8 +181,19 @@ module.exports = function Add(newEntry, callback) {
       break;
     }
     case "bedAssign": {
-      if (empty([newEntry.idPatient, newEntry.idFloor, newEntry.year, newEntry.month, newEntry.day]) || isNaN(newEntry.bedNum) || Number(newEntry.bedNum) < 0)
+      if (empty([newEntry.idPatient, newEntry.idFloor, newEntry.year1, newEntry.month1, newEntry.day1, newEntry.year2, newEntry.month2, newEntry.day2]) || isNaN(newEntry.bedNum) || Number(newEntry.bedNum) < 0)
         return callback("Data missing");
+
+      if (!validDate(+newEntry.year1, (+newEntry.month1 - 1), +newEntry.day1))
+        return callback("Invalid date");
+      if (!validDate(+newEntry.year2, (+newEntry.month2 - 1), +newEntry.day2))
+        return callback("Invalid date");
+
+      var f1 = new Date(+newEntry.year1, (+newEntry.month1 - 1), +newEntry.day1);
+      var f2 = new Date(+newEntry.year2, (+newEntry.month2 - 1), +newEntry.day2);
+
+      if (f1.getTime() > f2.getTime())
+        return callback("First date is in the future")
 
       Patient.get(newEntry.idPatient, function (err, data) {
          if (err || data.length == 0)
@@ -176,12 +203,11 @@ module.exports = function Add(newEntry, callback) {
              return callback("No entry");
            else if( newEntry.bedNum > data.nBeds)
              return callback("Bed limit exceeded");
-           console.log("Started creating bed");
            bedAssign.create({idPatient: newEntry.idPatient,
                              idFloor: newEntry.idFloor,
                              bedNum: Number(newEntry.bedNum),
-                             initDate: newEntry.day + "-" + newEntry.month + "-" + newEntry.year,
-                             endDate: ""},
+                             initDate: newEntry.day1 + "-" + newEntry.month1 + "-" + newEntry.year1,
+                             endDate: newEntry.day2 + "-" + newEntry.month2 + "-" + newEntry.year2},
             function (err, data) {
               if (err)
                 return callback(err);

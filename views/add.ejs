@@ -414,45 +414,88 @@ function showForm() {
     container.appendChild(document.createElement("br"));
 
     container.appendChild(document.createTextNode("Fecha de inicio: "));
-    var yearInput = document.createElement("select");
-    yearInput.type = "select";
-    yearInput.name = "year";
+    var yearInput1 = document.createElement("select");
+    yearInput1.type = "select";
+    yearInput1.name = "year1";
     var yearDef = document.createElement('option');
     yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
-    yearInput.appendChild(yearDef);
+    yearInput1.appendChild(yearDef);
     for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
       opt = document.createElement('option');
       opt.value = i.toString();
       opt.innerHTML = i.toString();
-      yearInput.appendChild(opt);
+      yearInput1.appendChild(opt);
     }
-    var monthInput = document.createElement("select");
-    monthInput.type = "select";
-    monthInput.name = "month";
+    var monthInput1 = document.createElement("select");
+    monthInput1.type = "select";
+    monthInput1.name = "month1";
     var monthDef = document.createElement('option');
     monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
-    monthInput.appendChild(monthDef);
+    monthInput1.appendChild(monthDef);
     for (var i = 1; i <= 12; i++)  {
       opt = document.createElement('option');
       opt.value = (i < 10 ? "0" : "") + i.toString();
       opt.innerHTML = i.toString();
-      monthInput.appendChild(opt);
+      monthInput1.appendChild(opt);
     }
-    var dayInput = document.createElement("select");
-    dayInput.type = "select";
-    dayInput.name = "day";
+    var dayInput1 = document.createElement("select");
+    dayInput1.type = "select";
+    dayInput1.name = "day1";
     var dayDef = document.createElement('option');
     dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
-    dayInput.appendChild(dayDef);
+    dayInput1.appendChild(dayDef);
     for (var i = 1; i <= 31; i++)  {
       opt = document.createElement('option');
       opt.value = (i < 10 ? "0" : "") + i.toString();
       opt.innerHTML = i.toString();
-      dayInput.appendChild(opt);
+      dayInput1.appendChild(opt);
     }
-    container.appendChild(yearInput);
-    container.appendChild(monthInput);
-    container.appendChild(dayInput);
+    container.appendChild(yearInput1);
+    container.appendChild(monthInput1);
+    container.appendChild(dayInput1);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+
+    container.appendChild(document.createTextNode("Fecha de salida: "));
+    var yearInput2 = document.createElement("select");
+    yearInput2.type = "select";
+    yearInput2.name = "year2";
+    var yearDef = document.createElement('option');
+    yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+    yearInput2.appendChild(yearDef);
+    for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
+      opt = document.createElement('option');
+      opt.value = i.toString();
+      opt.innerHTML = i.toString();
+      yearInput2.appendChild(opt);
+    }
+    var monthInput2 = document.createElement("select");
+    monthInput2.type = "select";
+    monthInput2.name = "month2";
+    var monthDef = document.createElement('option');
+    monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+    monthInput2.appendChild(monthDef);
+    for (var i = 1; i <= 12; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      monthInput2.appendChild(opt);
+    }
+    var dayInput2 = document.createElement("select");
+    dayInput2.type = "select";
+    dayInput2.name = "day2";
+    var dayDef = document.createElement('option');
+    dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+    dayInput2.appendChild(dayDef);
+    for (var i = 1; i <= 31; i++)  {
+      opt = document.createElement('option');
+      opt.value = (i < 10 ? "0" : "") + i.toString();
+      opt.innerHTML = i.toString();
+      dayInput2.appendChild(opt);
+    }
+    container.appendChild(yearInput2);
+    container.appendChild(monthInput2);
+    container.appendChild(dayInput2);
     container.appendChild(document.createElement("br"));
   }
 

@@ -175,7 +175,7 @@ router.post('/add', function(req, res) {
   Add(newEntry, function(err) {
     if (err) {
       console.log(err);
-      req.flash('message', 'Hubo un error al ingresar la entrada, porfavor revise los campos');
+      req.flash('message', 'Hubo un error al ingresar la entrada, porfavor revise los campos (ERRCODE: ' + err + ")");
       res.redirect('/add');
     }
     else {
@@ -193,24 +193,50 @@ router.get('/statistics', function(req, res) {
   if (!(typeof loggedUser == 'object' && loggedUser))
     res.render('noUser', {user: loggedUser, message: msg});
   else {
-    // var diagNum = [];
-    // var sectorNum = [];
-    // var patientNum = [];
-
-    Statistics(function (err, diagNum, sectorNum, patientNum) {
+    Statistics("", "", function (err, diagNumData, sectorNumData, patientNumData, medic_nurseNumData) {
       if (err) {
         console.log(err);
         req.flash('message', 'Hubo un error al recuperar los datos');
-        res.redirect('/add');
+        res.redirect('/');
+      }
+      else {
+        res.render('statistics', {user: loggedUser, message: msg,
+                                  diagNum: diagNumData,
+                                  sectorNum: sectorNumData,
+                                  patientNum: patientNumData,
+                                  medic_nurseNum: medic_nurseNumData});
       }
     });
-
-    res.render('statistics', {user: loggedUser, message: msg, diagNum: null});
   }
-
-
 });
 
+router.post('/statistics', function(req, res) {
+  var dates = req.body;
+  console.log(req.body);
+
+  var msg = req.flash('message') || req.flash('success');
+  if (msg.length == 0) msg = null;
+
+  var date1 = [req.body.year1, req.body.month1, req.body.day1];
+  var date2 = [req.body.year2, req.body.month2, req.body.day2];
+
+  // res.redirect('/statistics');
+
+  Statistics(date1, date2, function (err, diagNumData, sectorNumData, patientNumData, medic_nurseNumData) {
+    if (err) {
+      console.log(err);
+      req.flash('message', 'Hubo un error al recuperar los datos');
+      res.redirect('/add');
+    }
+    else {
+      res.render('statistics', {user: loggedUser, message: msg,
+                                diagNum: diagNumData,
+                                sectorNum: sectorNumData,
+                                patientNum: patientNumData,
+                                medic_nurseNum: medic_nurseNumData});
+    }
+  });
+});
 
 /* ------------------------- Export ------------------------- */
 module.exports = router;

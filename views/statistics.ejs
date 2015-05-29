@@ -16,15 +16,231 @@
         </tr>
         </thead>
         <tbody>
-          <% for (var i = 0; i < diagNum.length; i++) { %>
+          <% for (var propertyName in diagNum) { %>
             <tr>
-              <td> <%= diagNum[i][0]  %> </td>
-              <td> <%= diagNum[i][1]  %> </td>
+              <td> <%= propertyName  %> </td>
+              <td> <%= diagNum[propertyName]  %> </td>
             </tr>
           <% } %>
         </tbody>
       </table>
+      <br><br>
+      <p>Número de pacientes atendidos por cada área</p><br>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Área</th>
+          <th>Número de pacientes</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% for (var propertyName in sectorNum) { %>
+            <tr>
+              <td> <%= propertyName  %> </td>
+              <td> <%= sectorNum[propertyName]  %> </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <br><br>
+      <p>Estadísticas de cada paciente</p><br>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>DNI paciente</th>
+          <th>Número de veces internado</th>
+          <th>Diagnósticos</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% for (var propertyName in patientNum) { %>
+            <tr>
+              <td> <%= propertyName %> </td>
+              <td> <%= patientNum[propertyName].n %> </td>
+              <td>
+              <% for (var pn in patientNum[propertyName]) { %>
+                <%  if (pn != 'n') { %>
+                   <%= pn + "(" +patientNum[propertyName][pn]+") "  %>
+                <% } %>
+              <% } %>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <br><br>
+      <p>Pacientes atendidos por cada médico/enfermero en un periodo de tiempo</p>
+      <form class="form-inline" action="/statistics" method="post">
+        <div class="form-group" id="date1Container"></div>
+        <div class="form-group" id="date2Container"></div>
+        <br><br>
+        <center>
+        <button type="submit" id="submitForm" class="btn btn-default">Consultar</button>
+        </center>
+      </form>
+      <% if (medic_nurseNum)  { %>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>ID Médico/Enfermero</th>
+            <th>Número de pacientes atendidos</th>
+            <th>Pacientes atendidos</th>
+          </tr>
+          </thead>
+          <tbody>
+            <% for (var propertyName in medic_nurseNum) { %>
+              <tr>
+                <td> <%= propertyName %> </td>
+                <td> <%= medic_nurseNum[propertyName].length %> </td>
+                <td>
+                <% for (var i = 0; i < medic_nurseNum[propertyName].length; i++) { %>
+                  <%= medic_nurseNum[propertyName][i] %>
+                  <% if (i + 1 != medic_nurseNum[propertyName].length) { %>
+                    <%= ", " %>
+                  <% } %>
+                <% } %>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      <% } %>
     </div>
     <div class="col-md-3"></div>
   </div>
-  <div class="row"></div>
+  <div class="row"><br><br><br><br></div>
+
+<script>
+function activateSubmit() {
+  var year1 = document.getElementById("year1");
+  var month1 = document.getElementById("month1");
+  var day1 = document.getElementById("day1");
+
+  console.log(year1);
+  console.log(month1);
+  console.log(day1);
+
+  var year2 = document.getElementById("year2");
+  var month2 = document.getElementById("month2");
+  var day2 = document.getElementById("day2");
+
+  var activate = true;
+  if (year1.options[year1.selectedIndex] == '' || month1.options[month1.selectedIndex] == '' || day1.options[day1.selectedIndex] == '')
+    activate = false;
+  if (year2.options[year2.selectedIndex] == '' || month2.options[month2.selectedIndex] == '' || day2.options[day2.selectedIndex] == '')
+    activate = false;
+
+  document.getElementById("submitForm").disabled = activate;
+}
+
+onload = function loadDateForm() {
+  // Fecha 1
+  var container = document.getElementById("date1Container");
+
+  container.appendChild(document.createTextNode("Fecha inicial: "));
+  var yearInput1 = document.createElement("select");
+  yearInput1.type = "select";
+  yearInput1.name = "year1";
+  yearInput1.id = "year1";
+  yearInput1.setAttribute("onchange", activateSubmit);
+  var yearDef = document.createElement('option');
+  yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+  yearInput1.appendChild(yearDef);
+  for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
+    opt = document.createElement('option');
+    opt.value = i.toString();
+    opt.innerHTML = i.toString();
+    yearInput1.appendChild(opt);
+  }
+  var monthInput1 = document.createElement("select");
+  monthInput1.type = "select";
+  monthInput1.name = "month1";
+  monthInput1.id = "month1";
+  monthInput1.setAttribute("onchange", activateSubmit);
+  var monthDef = document.createElement('option');
+  monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+  monthInput1.appendChild(monthDef);
+  for (var i = 1; i <= 12; i++)  {
+    opt = document.createElement('option');
+    opt.value = (i < 10 ? "0" : "") + i.toString();
+    opt.innerHTML = i.toString();
+    monthInput1.appendChild(opt);
+  }
+  var dayInput1 = document.createElement("select");
+  dayInput1.type = "select";
+  dayInput1.name = "day1";
+  dayInput1.id = "day1";
+  dayInput1.setAttribute("onchange", activateSubmit);
+  var dayDef = document.createElement('option');
+  dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+  dayInput1.appendChild(dayDef);
+  for (var i = 1; i <= 31; i++)  {
+    opt = document.createElement('option');
+    opt.value = (i < 10 ? "0" : "") + i.toString();
+    opt.innerHTML = i.toString();
+    dayInput1.appendChild(opt);
+  }
+  container.appendChild(yearInput1);
+  container.appendChild(monthInput1);
+  container.appendChild(dayInput1);
+
+  // Fecha 2
+  container = document.getElementById("date2Container");
+
+  container.appendChild(document.createTextNode("Fecha final: "));
+  var yearInput2 = document.createElement("select");
+  yearInput2.type = "select";
+  yearInput2.name = "year2";
+  yearInput2.id = "year2";
+  yearInput2.setAttribute("onchange", activateSubmit);
+  var yearDef = document.createElement('option');
+  yearDef.value = ""; yearDef.innerHTML = "Año"; yearDef.disabled = true; yearDef.selected = true;
+  yearInput2.appendChild(yearDef);
+  for (var i = 2002; i <= (new Date().getFullYear()); i++)  {
+    opt = document.createElement('option');
+    opt.value = i.toString();
+    opt.innerHTML = i.toString();
+    yearInput2.appendChild(opt);
+  }
+  var monthInput2 = document.createElement("select");
+  monthInput2.type = "select";
+  monthInput2.name = "month2";
+  monthInput2.id = "month2";
+  monthInput2.setAttribute("onchange", activateSubmit);
+  var monthDef = document.createElement('option');
+  monthDef.value = ""; monthDef.innerHTML = "Mes"; monthDef.disabled = true; monthDef.selected = true;
+  monthInput2.appendChild(monthDef);
+  for (var i = 1; i <= 12; i++)  {
+    opt = document.createElement('option');
+    opt.value = (i < 10 ? "0" : "") + i.toString();
+    opt.innerHTML = i.toString();
+    monthInput2.appendChild(opt);
+  }
+  var dayInput2 = document.createElement("select");
+  dayInput2.type = "select";
+  dayInput2.name = "day2";
+  dayInput2.id = "day2";
+  dayInput2.setAttribute("onchange", activateSubmit);
+  var dayDef = document.createElement('option');
+  dayDef.value = ""; dayDef.innerHTML = "Día"; dayDef.disabled = true; dayDef.selected = true;
+  dayInput2.appendChild(dayDef);
+  for (var i = 1; i <= 31; i++)  {
+    opt = document.createElement('option');
+    opt.value = (i < 10 ? "0" : "") + i.toString();
+    opt.innerHTML = i.toString();
+    dayInput2.appendChild(opt);
+  }
+  container.appendChild(yearInput2);
+  container.appendChild(monthInput2);
+  container.appendChild(dayInput2);
+}
+</script>
+
+<script>
+  $(function() {
+    $("#header_nav_7").addClass("active");
+  });
+</script>
+
+<%- include('footer') -%>
